@@ -14,12 +14,17 @@
 #include <QGraphicsView>
 #include <QComboBox>
 #include <QDebug>
+#include <QTableView>
+#include <QStandardItemModel>
+#include <QHeaderView>
+#include <QTreeView>
 /*
 #include <QtGui>
 */
 
 #include "BTEditorScene.h"
 #include "BTEditorItem.h"
+#include "ComboBoxDelegate.h"
 
 const int InsertTextButton = 10;
 
@@ -36,11 +41,23 @@ MainWindow::MainWindow(QWidget *parent)
 	connect(m_scene, SIGNAL(itemInserted(BTEditorItem *)), this, SLOT(onItemInserted(BTEditorItem *)));
 	connect(m_scene, SIGNAL(itemSelected(QGraphicsItem *)), this, SLOT(onItemInserted(QGraphicsItem *)));
 	connect(m_scene, SIGNAL(viewDragged(const QPointF &, const QPointF &)), this, SLOT(onViewDragged(const QPointF &, const QPointF &)));
+	connect(m_scene, SIGNAL(updatePropertyView(BTEditorItem *)), this, SLOT(onUpdatePropertyView(BTEditorItem *)));
+
+	m_propertyView = createPropertyView();
+	m_preconditionView = new QTreeView;
 
 	QHBoxLayout *layout = new QHBoxLayout;
 	layout->addWidget(m_toolBox);
 	m_view = new QGraphicsView(m_scene);
 	layout->addWidget(m_view);
+
+	QVBoxLayout *sublayout = new QVBoxLayout;
+	sublayout->addWidget(m_propertyView);
+	sublayout->addWidget(m_preconditionView);
+	QWidget *subwidget = new QWidget;
+	subwidget->setLayout(sublayout);
+
+	layout->addWidget(subwidget);
 
 	QWidget *widget = new QWidget;
 	widget->setLayout(layout);
@@ -57,6 +74,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::createActions()
 {
+	m_saveAction = new QAction(tr("S&ave"), this);
+	m_saveAction->setShortcut(tr("CTRL+S"));
+	connect(m_saveAction, SIGNAL(triggered()), this, SLOT(onSave()));
+
 	m_exitAction = new QAction(tr("E&xit"), this);
 	m_exitAction->setShortcuts(QKeySequence::Quit);
 	m_exitAction->setStatusTip(tr("Quit Program"));
@@ -206,5 +227,51 @@ void MainWindow::onSceneScaleChanged( const QString &scale )
 void MainWindow::onViewDragged( const QPointF &pos, const QPointF &lastPos )
 {
 
+}
+
+QTableView * MainWindow::createPropertyView()
+{
+	QTableView *propertyView = new QTableView;
+	propertyView->setFixedWidth(250);
+
+
+	propertyView->setItemDelegateForRow(1, new ComboBoxDelegate(ComboBoxDelegate::ComboType::Precondition));
+
+	/*
+	const int nHeaderCount = 2;
+
+	QStandardItemModel *model = new QStandardItemModel;
+	model->setColumnCount(nHeaderCount);
+	model->setHeaderData(0, Qt::Horizontal, tr("Property"));
+	model->setHeaderData(1, Qt::Horizontal, tr("Value"));
+
+	propertyView->setModel(model);
+	propertyView->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
+
+	propertyView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
+	propertyView->setColumnWidth(0, 101);
+
+	for (int i=0; i<nHeaderCount; ++i)
+	{
+		model->setItem(i, 0, new QStandardItem("2009441676"));
+		model->item(i, 0)->setForeground(QBrush(QColor(255, 0, 0)));
+		model->item(i, 0)->setTextAlignment(Qt::AlignCenter);
+		model->setItem(i, 1, new QStandardItem(QString::fromLocal8Bit("¹þ¹þ")));
+	}
+	*/
+
+	return propertyView;
+}
+
+void MainWindow::onUpdatePropertyView( BTEditorItem *item )
+{
+	m_propertyView->setModel(item->model());
+
+
+}
+
+void MainWindow::onSave()
+{
+	m_scene->exportFile(tr("d:\\1.txt"));
 }
 

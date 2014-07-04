@@ -5,6 +5,7 @@
 
 QT_BEGIN_NAMESPACE
 class QMenu;
+class QStandardItemModel;
 QT_END_NAMESPACE
 
 class BTEditorArrow;
@@ -29,6 +30,7 @@ public:
 
 	inline ItemType getItemType() { return m_itemType; }
 
+	inline QStandardItemModel *model() { return m_model; }
 	QPixmap image() const;
 	int type() const { return Type; }
 
@@ -43,6 +45,8 @@ private:
 	QList<BTEditorArrow *> m_arrows;
 
 	QGraphicsTextItem *m_text;
+
+	QStandardItemModel *m_model;
 };
 
 #endif // BTEditorItem_h__

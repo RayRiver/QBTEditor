@@ -13,6 +13,8 @@ class QToolBar;
 class QButtonGroup;
 class QGraphicsView;
 class QComboBox;
+class QTableView;
+class QTreeView;
 QT_END_NAMESPACE
 
 class BTEditorScene;
@@ -32,6 +34,7 @@ public:
 	void createToolbars();
 
 	QWidget *createCellWidget(const QString &text, BTEditorItem::ItemType type);
+	QTableView *createPropertyView();
 
 private slots:
 	void onItemInserted(BTEditorItem *item);
@@ -40,9 +43,12 @@ private slots:
 	void onPointerTypeGroupClicked(int id);
 	void onSceneScaleChanged(const QString &scale);
 	void onViewDragged(const QPointF &pos, const QPointF &lastPos);
+	void onUpdatePropertyView(BTEditorItem *);
+	void onSave();
 	void onAbout();
 
 private:
+	QAction *m_saveAction;
 	QAction *m_exitAction;
 	QAction *m_aboutAction;
 
@@ -59,6 +65,9 @@ private:
 	QGraphicsView *m_view;
 
 	QComboBox *m_sceneScaleCombo;
+
+	QTableView *m_propertyView;
+	QTreeView *m_preconditionView;
 };
 
 #endif // MAINWINDOW_H

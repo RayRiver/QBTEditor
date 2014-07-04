@@ -47,15 +47,6 @@
     <ClCompile Include="GeneratedFiles\qrc_mainwindow.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_BTCanvas.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_BTCanvas.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="BTCanvas.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="mainwindow.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
@@ -74,6 +65,15 @@
     <ClCompile Include="BTEditorArrow.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="ComboBoxDelegate.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_ComboBoxDelegate.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_ComboBoxDelegate.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="mainwindow.h">
@@ -82,10 +82,10 @@
     <CustomBuild Include="mainwindow.qrc">
       <Filter>Resource Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="BTCanvas.h">
+    <CustomBuild Include="BTEditorScene.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="BTEditorScene.h">
+    <CustomBuild Include="ComboBoxDelegate.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>

@@ -3,6 +3,7 @@
 #include <QMenu>
 #include <QGraphicsSceneMouseEvent>
 #include <QPen>
+#include <QFile>
 
 #include "BTEditorItem.h"
 #include "BTEditorArrow.h"
@@ -55,9 +56,19 @@ void BTEditorScene::mouseMoveEvent( QGraphicsSceneMouseEvent *mouseEvent )
 	{
 	case Mode::Drag:
 		{
+			/*
 			const QPointF &lastPos = mouseEvent->lastScenePos();
 			const QPointF &pos = mouseEvent->scenePos();
 			emit viewDragged(pos, lastPos);
+			*/
+			const QList<QGraphicsItem *> &selectedItems = this->selectedItems();
+			for (int i=0; i<selectedItems.count(); ++i)
+			{
+				auto item = dynamic_cast<BTEditorItem *>(selectedItems.at(i));
+				emit updatePropertyView(item);
+				break;
+			}
+
 			QGraphicsScene::mouseMoveEvent(mouseEvent);
 		}
 		break;
@@ -124,5 +135,17 @@ void BTEditorScene::mouseReleaseEvent( QGraphicsSceneMouseEvent *mouseEvent )
 	}
 
 	QGraphicsScene::mouseReleaseEvent(mouseEvent);
+}
+
+void BTEditorScene::exportFile( const QString &filename )
+{
+	QFile file(filename);
+	if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+	{
+		Q_ASSERT(false);
+		return;
+	}
+
+	file.write("json");
 }
 

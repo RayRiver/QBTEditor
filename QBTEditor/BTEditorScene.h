@@ -33,10 +33,13 @@ public:
 	inline const QColor &getItemColor() { return m_itemColor; }
 	inline void setItemColor(const QColor &itemColor) { m_itemColor = itemColor; }
 
+	void exportFile(const QString &filename);
+
 signals:
 	void itemInserted(BTEditorItem *item);
 	void itemSelected(QGraphicsItem *item);
 	void viewDragged(const QPointF &pos, const QPointF &lastPos);
+	void updatePropertyView(BTEditorItem *);
 
 protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);

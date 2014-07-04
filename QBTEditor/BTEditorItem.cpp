@@ -4,74 +4,97 @@
 #include <QPainter>
 #include <QGraphicsScene>
 #include <QGraphicsTextItem>
+#include <QStandardItemModel>
+#include <QComboBox>
+#include <QDebug>
 
 #include "BTEditorArrow.h"
+#include "ComboBoxDelegate.h"
 
 BTEditorItem::BTEditorItem(ItemType itemType, QGraphicsItem *parent /*= 0*/ )
     : QGraphicsPolygonItem(parent)
 	, m_itemType(itemType)
 {
+
+	m_model = new QStandardItemModel;
+
+
 	QPainterPath path;
 	switch (itemType) {
 	case ItemType::PrioritySelectorNode:
+		{
 		m_polygon << QPointF(-100, -60) << QPointF(100, -60)
 			<< QPointF(100, 60) << QPointF(-100, 60)
 			<< QPointF(-100, -60);
+
+		m_model->setRowCount(2);
+		m_model->setHeaderData(0, Qt::Vertical, QObject::tr("Item Type"));
+		m_model->setHeaderData(1, Qt::Vertical, QObject::tr("Precondition"));
+		m_model->setItem(0, 0, new QStandardItem("PrioritySelectorNode"));
+		//m_model->setItem(1, 0, new QStandardItem("kkk"));
+
+		QModelIndex index = m_model->index(1, 0, QModelIndex());
+		m_model->setData(index, QVariant(ComboBoxDelegate::defaultValue(ComboBoxDelegate::ComboType::Precondition)));
+
+		auto s = m_model->data(index).toString();
+		qDebug() << "test: " << s;
+
+		int x= 0;
+
+		}
+
 		break;
 	case ItemType::NonePrioritySelectorNode:
 		m_polygon << QPointF(-100, -60) << QPointF(100, -60)
 			<< QPointF(100, 60) << QPointF(-100, 60)
 			<< QPointF(-100, -60);;
+
+		m_model->setRowCount(1);
+		m_model->setHeaderData(0, Qt::Vertical, QObject::tr("Item Type"));
+		m_model->setItem(0, 0, new QStandardItem("NonePrioritySelectorNode"));
 		break;
 	case ItemType::SequenceNode:
 		m_polygon << QPointF(-100, -60) << QPointF(100, -60)
 			<< QPointF(100, 60) << QPointF(-100, 60)
 			<< QPointF(-100, -60);
+
+		m_model->setRowCount(1);
+		m_model->setHeaderData(0, Qt::Vertical, QObject::tr("Item Type"));
+		m_model->setItem(0, 0, new QStandardItem("SequenceNode"));
 		break;
 	case ItemType::LoopNode:
 		m_polygon << QPointF(-100, -60) << QPointF(100, -60)
 			<< QPointF(100, 60) << QPointF(-100, 60)
 			<< QPointF(-100, -60);
+
+		m_model->setRowCount(1);
+		m_model->setHeaderData(0, Qt::Vertical, QObject::tr("Item Type"));
+		m_model->setItem(0, 0, new QStandardItem("LoopNode"));
 		break;
 	case ItemType::ParallelNode:
 		m_polygon << QPointF(-100, -60) << QPointF(100, -60)
 			<< QPointF(100, 60) << QPointF(-100, 60)
 			<< QPointF(-100, -60);
+
+		m_model->setRowCount(1);
+		m_model->setHeaderData(0, Qt::Vertical, QObject::tr("Item Type"));
+		m_model->setItem(0, 0, new QStandardItem("ParallelNode"));
 		break;
 	case ItemType::ActionNode:
 		m_polygon << QPointF(-100, 0) << QPointF(0, 100)
 			<< QPointF(100, 0) << QPointF(0, -100)
 			<< QPointF(-100, 0);
+
+		m_model->setRowCount(2);
+		m_model->setHeaderData(0, Qt::Vertical, QObject::tr("Item Type"));
+		m_model->setHeaderData(1, Qt::Vertical, QObject::tr("implenment"));
+		m_model->setItem(0, 0, new QStandardItem("ActionNode"));
+		m_model->setItem(1, 0, new QStandardItem("???"));
 		break;
 	default:
 		Q_ASSERT(false);
 		break;
-		/*
-	case ItemType::StartEnd:
-		path.moveTo(200, 50);
-		path.arcTo(150, 0, 50, 50, 0, 90);
-		path.arcTo(50, 0, 50, 50, 90, 90);
-		path.arcTo(50, 50, 50, 50, 180, 90);
-		path.arcTo(150, 50, 50, 50, 270, 90);
-		path.lineTo(200, 25);
-		m_myPolygon = path.toFillPolygon();
-		break;
-	case ItemType::Conditional:
-		m_myPolygon << QPointF(-100, 0) << QPointF(0, 100)
-			<< QPointF(100, 0) << QPointF(0, -100)
-			<< QPointF(-100, 0);
-		break;
-	case ItemType::Step:
-		m_myPolygon << QPointF(-100, -100) << QPointF(100, -100)
-			<< QPointF(100, 100) << QPointF(-100, 100)
-			<< QPointF(-100, -100);
-		break;
-	default:
-		m_myPolygon << QPointF(-120, -80) << QPointF(-70, 80)
-			<< QPointF(120, 80) << QPointF(70, -80)
-			<< QPointF(-120, -80);
-		break;
-		*/
+
 	}
 	setPolygon(m_polygon);
 	//const auto &pixmap = QPixmap(":/images/pointer.png");
